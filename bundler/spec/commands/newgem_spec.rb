@@ -28,6 +28,7 @@ RSpec.describe "bundle gem" do
   let(:require_path) { "mygem" }
 
   before do
+    global_config "BUNDLE_GEM__CHANGELOG" => "false"
     git_config_content = <<-EOF
     [user]
       name = "Bundler User"
@@ -157,7 +158,6 @@ RSpec.describe "bundle gem" do
       end
     end
   end
-
   shared_examples_for "--changelog flag" do
     before do
       bundle! "gem #{gem_name} --changelog"
@@ -172,7 +172,7 @@ RSpec.describe "bundle gem" do
     before do
       bundle! "gem #{gem_name} --no-changelog"
     end
-    it "generates a gem skeleton without CHANGELOG license" do
+    it "generates a gem skeleton without a CHANGELOG" do
       gem_skeleton_assertions
       expect(bundled_app("#{gem_name}/CHANGELOG.md")).to_not exist
     end
@@ -1108,6 +1108,17 @@ Usage: "bundle gem NAME [OPTIONS]"
       end
 
       expect(bundled_app("foobar/CODE_OF_CONDUCT.md")).to exist
+    end
+
+    it "asks about CHANGELOG" do
+      global_config "BUNDLE_GEM__MIT" => "false", "BUNDLE_GEM__TEST" => "false", "BUNDLE_GEM__CI" => "false", "BUNDLE_GEM__RUBOCOP" => "false",
+                    "BUNDLE_GEM__COC" => "false"
+
+      bundle "gem foobar" do |input, _, _|
+        input.puts "yes"
+      end
+
+      expect(bundled_app("foobar/CHANGELOG.md")).to exist
     end
   end
 
