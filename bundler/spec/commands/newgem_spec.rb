@@ -158,6 +158,7 @@ RSpec.describe "bundle gem" do
       end
     end
   end
+
   shared_examples_for "--changelog flag" do
     before do
       bundle! "gem #{gem_name} --changelog"
