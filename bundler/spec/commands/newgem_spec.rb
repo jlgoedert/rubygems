@@ -163,7 +163,7 @@ RSpec.describe "bundle gem" do
     before do
       bundle! "gem #{gem_name} --changelog"
     end
-    it "generates a gem skeleton with a CHANGELOG" do
+    it "generates a gem skeleton with a CHANGELOG", :readline do
       gem_skeleton_assertions
       expect(bundled_app("#{gem_name}/CHANGELOG.md")).to exist
     end
@@ -173,7 +173,7 @@ RSpec.describe "bundle gem" do
     before do
       bundle! "gem #{gem_name} --no-changelog"
     end
-    it "generates a gem skeleton without a CHANGELOG" do
+    it "generates a gem skeleton without a CHANGELOG", :readline do
       gem_skeleton_assertions
       expect(bundled_app("#{gem_name}/CHANGELOG.md")).to_not exist
     end
